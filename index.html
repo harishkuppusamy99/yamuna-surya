@@ -1,7 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"><!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 
+  <title>Happy Married Life</title> 
+ 
+  <style> 
+    * { 
+      box-sizing: border-box; 
+    } 
+ 
+    body { 
+      margin: 0; 
+      background: #000; 
+      overflow: hidden; 
+      height: 100vh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      font-family: Arial, sans-serif; 
+    } 
+ 
+    #fireworks { 
+      position: fixed; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: 1; 
+      pointer-events: none; 
+    } 
+ 
+    .video-box { 
+      position: relative; 
+      z-index: 5; 
+      width: 90%; 
+      max-width: 900px; 
+    } 
+ 
+    video { 
+      width: 100%; 
+      display: block; 
+      border-radius: 15px; 
+ 
+      box-shadow: 
+        0 0 15px white, 
+        0 0 35px rgba(255,255,255,0.5); 
+    } 
+  </style> 
+</head> 
+ 
+<body> 
+ 
+  <canvas id="fireworks"></canvas> 
+ 
+  <div class="video-box"> 
+    <video controls autoplay loop> 
+      <source src="dance1.mp4" type="video/mp4"> 
+      Your browser does not support video. 
+    </video> 
+  </div> 
+ 
+ 
+<script> 
+ 
+const canvas = document.getElementById("fireworks"); 
+const ctx = canvas.getContext("2d"); 
+ 
+let W, H; 
+ 
+function resize() { 
+  W = canvas.width = window.innerWidth; 
+  H = canvas.height = window.innerHeight; 
+} 
+ 
+resize(); 
+window.addEventListener("resize", resize); 
+ 
+ 
+/* ========================= 
+   COLORS 
+========================= */ 
+ 
+const colors = [ 
+  "#ffd700", 
+  "#ff1744", 
+  "#ff4081", 
+  "#00e5ff", 
+  "#76ff03", 
+  "#ffffff", 
+  "#ff9100" 
+]; 
+ 
+ 
+/* ========================= 
+   ARRAYS 
+========================= */ 
+ 
+let rockets = []; 
+let particles = []; 
+let textParticles = []; 
+ 
+ 
+/* ========================= 
+   SKY SHOT ROCKET 
+========================= */ 
+ 
+function launchRocket() { 
+ 
+  let x; 
+ 
+  if (Math.random() < 0.5) { 
+    x = Math.random() * W * 0.20; 
+  } else { 
+    x = W - Math.random() * W * 0.20; 
+  } 
+ 
+  rockets.push({ 
+ 
+    x: x, 
+ 
+    y: H + 20, 
+ 
+    vx: (Math.random() - 0.5) * 0.7, 
+ 
+    vy: -(Math.random() * 6 + 10), 
+ 
+    targetY: H * 0.12 + Math.random() * 80, 
+ 
+    color: 
+      colors[Math.floor(Math.random() * colors.length)], 
+ 
+    trail: [] 
+  }); 
+} 
+ 
+ 
+/* ========================= 
+   BIG FIREWORK 
+========================= */ 
+ 
+function explode(x, y, color) { 
+ 
+  for (let i = 0; i < 130; i++) { 
+ 
+    const angle = 
+      Math.random() * Math.PI * 2; 
+ 
+    const speed = 
+      Math.random() * 5 + 2; 
+ 
+    particles.push({ 
+ 
+      x: x, 
+      y: y, 
+ 
+      vx: Math.cos(angle) * speed, 
+ 
+      vy: Math.sin(angle) * speed, 
+ 
+      gravity: 0.045, 
+ 
+      life: 110 + Math.random() * 70, 
+ 
+      maxLife: 180, 
+ 
+      size: Math.random() * 2.5 + 1, 
+ 
+      color: color 
+    }); 
+  } 
+ 
+ 
+  /* Bright flash */ 
+ 
+  for (let i = 0; i < 35; i++) { 
+ 
+    const angle = 
+      Math.random() * Math.PI * 2; 
+ 
+    const speed = 
+      Math.random() * 3; 
+ 
+    particles.push({ 
+ 
+      x: x, 
+      y: y, 
+ 
+      vx: Math.cos(angle) * speed, 
+ 
+      vy: Math.sin(angle) * speed, 
+ 
+      gravity: 0.01, 
+ 
+      life: 35, 
+ 
+      maxLife: 35, 
+ 
+      size: 3, 
+ 
+      color: "#ffffff" 
+    }); 
+  } 
+} 
+ 
+ 
+/* ========================= 
+   ROCKET DRAW 
+========================= */ 
+ 
+function drawRocket(r) { 
+ 
+  /* Trail */ 
+ 
+  for (let i = 0; i < r.trail.length; i++) { 
+ 
+    const t = r.trail[i]; 
+ 
+    ctx.beginPath(); 
+ 
+    ctx.arc( 
+      t.x, 
+      t.y, 
+      1.5, 
+      0, 
+      Math.PI * 2 
+    ); 
+ 
+    ctx.fillStyle = 
+      `rgba(255,190,50,${i / r.trail.length})`; 
+ 
+    ctx.shadowBlur = 15; 
+    ctx.shadowColor = "#ff9800"; 
+ 
+    ctx.fill(); 
+  } 
+ 
+ 
+  /* Rocket head */ 
+ 
+  ctx.beginPath(); 
+ 
+  ctx.arc( 
+    r.x, 
+    r.y, 
+    3, 
+    0, 
+    Math.PI * 2 
+  ); 
+ 
+  ctx.fillStyle = "#ffffff"; 
+ 
+  ctx.shadowBlur = 25; 
+  ctx.shadowColor = r.color; 
+ 
+  ctx.fill(); 
+} 
+ 
+ 
+/* ========================= 
+   UPDATE ROCKETS 
+========================= */ 
+ 
+function updateRockets() { 
+ 
+  for ( 
+    let i = rockets.length - 1; 
+    i >= 0; 
+    i-- 
+  ) { 
+ 
+    const r = rockets[i]; 
+ 
+    r.trail.push({ 
+      x: r.x, 
+      y: r.y 
+    }); 
+ 
+    if (r.trail.length > 22) { 
+      r.trail.shift(); 
+    } 
+ 
+    r.x += r.vx; 
+    r.y += r.vy; 
+ 
+    r.vy += 0.08; 
+ 
+ 
+    if ( 
+      r.y <= r.targetY || 
+      r.vy >= 0 
+    ) { 
+ 
+      explode( 
+        r.x, 
+        r.y, 
+        r.color 
+      ); 
+ 
+      rockets.splice(i, 1); 
+    } 
+  } 
+} 
+ 
+ 
+/* ========================= 
+   CREATE TEXT PARTICLES 
+========================= */ 
+ 
+function createTextParticles() { 
+ 
+  const tempCanvas = 
+    document.createElement("canvas"); 
+ 
+  const tempCtx = 
+    tempCanvas.getContext("2d"); 
+ 
+  tempCanvas.width = W; 
+  tempCanvas.height = 170; 
+ 
+ 
+  /* =========================
+     FIXED RESPONSIVE TEXT
+     ========================= */
+
+  let fontSize;
+
+  if (W <= 400) {
+    fontSize = 24;
+  } else if (W <= 600) {
+    fontSize = 32;
+  } else {
+    fontSize = Math.min(W * 0.075, 62);
+  }
+
+  tempCtx.font = 
+    "bold " + fontSize + "px Arial"; 
+ 
+  tempCtx.textAlign = "center"; 
+  tempCtx.textBaseline = "middle"; 
+ 
+  tempCtx.fillStyle = "#ffffff"; 
+ 
+  tempCtx.fillText( 
+    "HAPPY MARRIED LIFE", 
+    W / 2, 
+    75 
+  ); 
+ 
+ 
+  const image = 
+    tempCtx.getImageData( 
+      0, 
+      0, 
+      W, 
+      170 
+    ).data; 
+ 
+ 
+  textParticles = []; 
+ 
+ 
+  /* 
+    Convert text into glowing particles 
+  */ 
+ 
+  for ( 
+    let y = 0; 
+    y < 170; 
+    y += 3 
+  ) { 
+ 
+    for ( 
+      let x = 0; 
+      x < W; 
+      x += 3 
+    ) { 
+ 
+      const index = 
+        (y * W + x) * 4; 
+ 
+      if (image[index + 3] > 150) { 
+ 
+        textParticles.push({ 
+ 
+          x: x, 
+ 
+          y: y + 5, 
+ 
+          currentX: x, 
+ 
+          currentY: y + 5, 
+ 
+          color: 
+            Math.random() > 0.5 
+              ? "#ffd700" 
+              : "#ffffff" 
+        }); 
+      } 
+    } 
+  } 
+} 
+ 
+ 
+/* ========================= 
+   DRAW TEXT 
+========================= */ 
+ 
+function drawText() { 
+ 
+  for (const p of textParticles) { 
+ 
+    /* 
+       FIXED TEXT
+       No shaking
+       No floating
+    */ 
+ 
+    ctx.beginPath(); 
+ 
+    ctx.arc( 
+      p.currentX, 
+      p.currentY, 
+      1.8, 
+      0, 
+      Math.PI * 2 
+    ); 
+ 
+    ctx.fillStyle = 
+      p.color; 
+ 
+    ctx.shadowBlur = 15; 
+ 
+    ctx.shadowColor = 
+      "#ffd700"; 
+ 
+    ctx.fill(); 
+  } 
+} 
+ 
+ 
+/* ========================= 
+   PARTICLES 
+========================= */ 
+ 
+function updateParticles() { 
+ 
+  for ( 
+    let i = particles.length - 1; 
+    i >= 0; 
+    i-- 
+  ) { 
+ 
+    const p = particles[i]; 
+ 
+    p.x += p.vx; 
+    p.y += p.vy; 
+ 
+    p.vy += p.gravity; 
+ 
+    p.vx *= 0.985; 
+    p.vy *= 0.985; 
+ 
+    p.life--; 
+ 
+    if (p.life <= 0) { 
+      particles.splice(i, 1); 
+    } 
+  } 
+} 
+ 
+ 
+/* ========================= 
+   DRAW PARTICLES 
+========================= */ 
+ 
+function drawParticles() { 
+ 
+  for (const p of particles) { 
+ 
+    const alpha = 
+      Math.max( 
+        p.life / p.maxLife, 
+        0 
+      ); 
+ 
+    ctx.globalAlpha = alpha; 
+ 
+    ctx.beginPath(); 
+ 
+    ctx.arc( 
+      p.x, 
+      p.y, 
+      p.size, 
+      0, 
+      Math.PI * 2 
+    ); 
+ 
+    ctx.fillStyle = 
+      p.color; 
+ 
+    ctx.shadowBlur = 18; 
+ 
+    ctx.shadowColor = 
+      p.color; 
+ 
+    ctx.fill(); 
+  } 
+ 
+  ctx.globalAlpha = 1; 
+} 
+ 
+ 
+/* ========================= 
+   ANIMATION 
+========================= */ 
+ 
+function animate() { 
+ 
+  ctx.clearRect( 
+    0, 
+    0, 
+    W, 
+    H 
+  ); 
+ 
+  updateRockets(); 
+ 
+  updateParticles(); 
+ 
+  for (const r of rockets) { 
+    drawRocket(r); 
+  } 
+ 
+  drawParticles(); 
+ 
+  drawText(); 
+ 
+  requestAnimationFrame( 
+    animate 
+  ); 
+} 
+ 
+ 
+/* ========================= 
+   START 
+========================= */ 
+ 
+createTextParticles(); 
+ 
+setTimeout( 
+  () => launchRocket(), 
+  300 
+); 
+ 
+setTimeout( 
+  () => launchRocket(), 
+  900 
+); 
+ 
+setTimeout( 
+  () => launchRocket(), 
+  1500 
+); 
+ 
+setTimeout( 
+  () => launchRocket(), 
+  2200 
+); 
+ 
+ 
+/* Continuous sky shots */ 
+ 
+setInterval(() => { 
+ 
+  launchRocket(); 
+ 
+}, 1300); 
+ 
+ 
+/* Start animation */ 
+ 
+animate(); 
+ 
+</script> 
+ 
+</body> 
+</html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Happy Married Life</title>
