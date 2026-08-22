@@ -2,12 +2,20 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Happy Married Life</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Happy Married Life ❤️</title>
+
 
 <style>
+
+/* =========================
+   BASIC
+========================= */
 
 * {
     box-sizing: border-box;
@@ -41,85 +49,54 @@ body {
 ========================= */
 
 .title {
+
     position: fixed;
 
     top: 25px;
+
     left: 50%;
 
     transform: translateX(-50%);
-
-    z-index: 10;
 
     width: 100%;
 
     text-align: center;
 
+    z-index: 10;
+
     color: #ffd700;
 
-    font-size: clamp(28px, 6vw, 65px);
+    /* FONT CHANGED ONLY */
+    font-family:
+        "Georgia",
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(
+        28px,
+        6vw,
+        65px
+    );
 
     font-weight: bold;
 
+    letter-spacing: 3px;
+
     white-space: nowrap;
 
-    /*
-       IMPORTANT:
-       NO animation
-       NO shake
-       NO transform animation
-    */
+    /* NO SHAKE */
 
     text-shadow:
+
         0 0 5px #ffffff,
+
         0 0 10px #ffd700,
+
         0 0 20px #ffd700,
+
         0 0 35px #ff9800,
-        0 0 50px #ff1744;
-}
 
-
-/* =========================
-   HEARTS AROUND TITLE
-========================= */
-
-.heart {
-    position: fixed;
-
-    z-index: 11;
-
-    color: #ff1744;
-
-    font-size: 20px;
-
-    pointer-events: none;
-
-    text-shadow:
-        0 0 5px #ff1744,
-        0 0 12px #ff4081,
-        0 0 20px #ff1744;
-}
-
-
-/* Fixed hearts */
-
-.heart1 {
-    top: 35px;
-    left: 20%;
-}
-
-.heart2 {
-    top: 45px;
-    left: 27%;
-}
-
-.heart3 {
-    top: 35px;
-    right: 20%;
-}
-
-.heart4 {
-    top: 45px;
-    right: 27%;
+        0 0 50px #ff6f00;
 }
 
 
@@ -132,15 +109,17 @@ body {
     position: fixed;
 
     top: 50%;
+
     left: 50%;
 
-    transform: translate(-50%, -50%);
-
-    z-index: 5;
+    transform:
+        translate(-50%, -50%);
 
     width: 90%;
 
     max-width: 900px;
+
+    z-index: 5;
 }
 
 
@@ -161,10 +140,14 @@ body {
     background: #000;
 
     box-shadow:
-        0 0 15px #ffffff,
-        0 0 30px rgba(255,255,255,0.7),
-        0 0 50px rgba(255,215,0,0.3);
 
+        0 0 15px #fff,
+
+        0 0 30px
+        rgba(255,255,255,0.7),
+
+        0 0 50px
+        rgba(255,215,0,0.4);
 }
 
 
@@ -180,42 +163,18 @@ body {
 
         font-size: 22px;
 
+        letter-spacing: 1px;
     }
 
     .video-box {
 
         width: 90%;
-
-    }
-
-    .heart {
-
-        font-size: 14px;
-
-    }
-
-    .heart1 {
-        left: 8%;
-    }
-
-    .heart2 {
-        left: 18%;
-    }
-
-    .heart3 {
-        right: 8%;
-    }
-
-    .heart4 {
-        right: 18%;
     }
 
     .video-box video {
 
         border-radius: 12px;
-
     }
-
 }
 
 </style>
@@ -227,29 +186,21 @@ body {
 
 
 <!-- =========================
-     FIREWORK BACKGROUND
+     FIREWORK CANVAS
 ========================= -->
 
 <canvas id="fireworks"></canvas>
 
 
 <!-- =========================
-     SINGLE TITLE
+     TITLE
 ========================= -->
 
 <div class="title">
-    HAPPY MARRIED LIFE
+
+    ❤️ HAPPY MARRIED LIFE ❤️
+
 </div>
-
-
-<!-- =========================
-     HEARTS
-========================= -->
-
-<div class="heart heart1">♥</div>
-<div class="heart heart2">♥</div>
-<div class="heart heart3">♥</div>
-<div class="heart heart4">♥</div>
 
 
 <!-- =========================
@@ -258,15 +209,23 @@ body {
 
 <div class="video-box">
 
-    <video controls autoplay loop muted playsinline>
+    <video
+        controls
+        autoplay
+        loop
+        muted
+        playsinline>
 
-        <source src="dance1.mp4" type="video/mp4">
+        <source
+            src="dance1.mp4"
+            type="video/mp4">
 
         Your browser does not support video.
 
     </video>
 
 </div>
+
 
 
 <script>
@@ -295,9 +254,7 @@ function resize() {
     H =
         canvas.height =
         window.innerHeight;
-
 }
-
 
 resize();
 
@@ -307,6 +264,7 @@ window.addEventListener(
 );
 
 
+
 /* =========================
    COLORS
 ========================= */
@@ -314,14 +272,21 @@ window.addEventListener(
 const colors = [
 
     "#ffd700",
+
     "#ff1744",
+
     "#ff4081",
+
     "#00e5ff",
+
     "#76ff03",
+
     "#ffffff",
+
     "#ff9100"
 
 ];
+
 
 
 /* =========================
@@ -332,6 +297,9 @@ let rockets = [];
 
 let particles = [];
 
+let hearts = [];
+
+
 
 /* =========================
    LAUNCH ROCKET
@@ -341,26 +309,22 @@ function launchRocket() {
 
     let x;
 
-    /*
-       Fireworks only from
-       left and right sides
-    */
-
     if (Math.random() < 0.5) {
 
         x =
-            Math.random() *
-            W *
-            0.20;
+            Math.random()
+            * W
+            * 0.20;
 
-    } else {
+    }
+
+    else {
 
         x =
             W -
-            Math.random() *
-            W *
-            0.20;
-
+            Math.random()
+            * W
+            * 0.20;
     }
 
 
@@ -396,18 +360,65 @@ function launchRocket() {
 }
 
 
+
+/* =========================
+   CREATE HEART
+========================= */
+
+function createHeart(
+    x = Math.random() * W,
+    y = H + 20
+) {
+
+    hearts.push({
+
+        x: x,
+
+        y: y,
+
+        size:
+            Math.random() * 10 + 8,
+
+        speed:
+            Math.random() * 1.5 + 0.8,
+
+        drift:
+            (Math.random() - 0.5)
+            * 0.8,
+
+        life:
+            180 +
+            Math.random() * 100,
+
+        color:
+            Math.random() > 0.5
+            ? "#ff1744"
+            : "#ff4081"
+
+    });
+
+}
+
+
+
 /* =========================
    FIREWORK EXPLOSION
 ========================= */
 
-function explode(x, y, color) {
+function explode(
+    x,
+    y,
+    color
+) {
 
 
-    /*
-       Main particles
-    */
+    /* MAIN PARTICLES */
 
-    for (let i = 0; i < 130; i++) {
+    for (
+        let i = 0;
+        i < 130;
+        i++
+    ) {
 
         const angle =
             Math.random()
@@ -451,11 +462,14 @@ function explode(x, y, color) {
     }
 
 
-    /*
-       White flash
-    */
 
-    for (let i = 0; i < 35; i++) {
+    /* WHITE FLASH */
+
+    for (
+        let i = 0;
+        i < 35;
+        i++
+    ) {
 
         const angle =
             Math.random()
@@ -495,108 +509,31 @@ function explode(x, y, color) {
     }
 
 
-    /*
-       Small hearts
-       inside fireworks
-    */
 
-    for (let i = 0; i < 12; i++) {
+    /* HEARTS FROM FIREWORK */
 
-        const angle =
-            Math.random()
-            * Math.PI
-            * 2;
+    for (
+        let i = 0;
+        i < 12;
+        i++
+    ) {
 
-        const speed =
-            Math.random() * 2 + 1;
+        createHeart(
 
+            x +
+            (Math.random() - 0.5)
+            * 100,
 
-        particles.push({
+            y +
+            (Math.random() - 0.5)
+            * 100
 
-            x: x,
-
-            y: y,
-
-            vx:
-                Math.cos(angle)
-                * speed,
-
-            vy:
-                Math.sin(angle)
-                * speed,
-
-            gravity: 0.02,
-
-            life: 80,
-
-            maxLife: 80,
-
-            size: 4,
-
-            color: "#ff1744",
-
-            heart: true
-
-        });
+        );
 
     }
 
 }
 
-
-/* =========================
-   DRAW HEART
-========================= */
-
-function drawHeart(x, y, size, color) {
-
-    ctx.save();
-
-    ctx.translate(x, y);
-
-    ctx.scale(size / 5, size / 5);
-
-    ctx.beginPath();
-
-    ctx.moveTo(0, 5);
-
-    ctx.bezierCurveTo(
-        -10, -2,
-        -8, -9,
-        -3, -9
-    );
-
-    ctx.bezierCurveTo(
-        0, -9,
-        0, -5,
-        0, -4
-    );
-
-    ctx.bezierCurveTo(
-        0, -5,
-        2, -9,
-        5, -9
-    );
-
-    ctx.bezierCurveTo(
-        10, -9,
-        10, -2,
-        0, 5
-    );
-
-    ctx.closePath();
-
-    ctx.fillStyle = color;
-
-    ctx.shadowBlur = 15;
-
-    ctx.shadowColor = color;
-
-    ctx.fill();
-
-    ctx.restore();
-
-}
 
 
 /* =========================
@@ -606,9 +543,7 @@ function drawHeart(x, y, size, color) {
 function drawRocket(r) {
 
 
-    /*
-       Rocket trail
-    */
+    /* TRAIL */
 
     for (
         let i = 0;
@@ -623,11 +558,17 @@ function drawRocket(r) {
         ctx.beginPath();
 
         ctx.arc(
+
             t.x,
+
             t.y,
+
             1.5,
+
             0,
+
             Math.PI * 2
+
         );
 
 
@@ -651,18 +592,23 @@ function drawRocket(r) {
     }
 
 
-    /*
-       Rocket head
-    */
+
+    /* ROCKET HEAD */
 
     ctx.beginPath();
 
     ctx.arc(
+
         r.x,
+
         r.y,
+
         3,
+
         0,
+
         Math.PI * 2
+
     );
 
 
@@ -681,19 +627,18 @@ function drawRocket(r) {
 }
 
 
+
 /* =========================
    UPDATE ROCKETS
 ========================= */
 
 function updateRockets() {
 
-
     for (
         let i = rockets.length - 1;
         i >= 0;
         i--
     ) {
-
 
         const r =
             rockets[i];
@@ -721,20 +666,25 @@ function updateRockets() {
 
         r.y += r.vy;
 
-
         r.vy += 0.08;
 
 
         if (
+
             r.y <= r.targetY ||
+
             r.vy >= 0
+
         ) {
 
-
             explode(
+
                 r.x,
+
                 r.y,
+
                 r.color
+
             );
 
 
@@ -750,19 +700,18 @@ function updateRockets() {
 }
 
 
+
 /* =========================
    UPDATE PARTICLES
 ========================= */
 
 function updateParticles() {
 
-
     for (
         let i = particles.length - 1;
         i >= 0;
         i--
     ) {
-
 
         const p =
             particles[i];
@@ -772,19 +721,18 @@ function updateParticles() {
 
         p.y += p.vy;
 
-
         p.vy += p.gravity;
-
 
         p.vx *= 0.985;
 
         p.vy *= 0.985;
 
-
         p.life--;
 
 
-        if (p.life <= 0) {
+        if (
+            p.life <= 0
+        ) {
 
             particles.splice(
                 i,
@@ -798,51 +746,31 @@ function updateParticles() {
 }
 
 
+
 /* =========================
    DRAW PARTICLES
 ========================= */
 
 function drawParticles() {
 
-
     for (
         const p of particles
     ) {
 
-
         const alpha =
             Math.max(
+
                 p.life /
                 p.maxLife,
+
                 0
+
             );
 
 
         ctx.globalAlpha =
             alpha;
 
-
-        /*
-           Draw heart particles
-        */
-
-        if (p.heart) {
-
-            drawHeart(
-                p.x,
-                p.y,
-                p.size,
-                p.color
-            );
-
-            continue;
-
-        }
-
-
-        /*
-           Normal firework particle
-        */
 
         ctx.beginPath();
 
@@ -881,12 +809,182 @@ function drawParticles() {
 }
 
 
+
+/* =========================
+   DRAW HEART
+========================= */
+
+function drawHeart(
+    x,
+    y,
+    size,
+    color,
+    alpha
+) {
+
+    ctx.save();
+
+    ctx.globalAlpha =
+        alpha;
+
+    ctx.fillStyle =
+        color;
+
+    ctx.shadowBlur = 20;
+
+    ctx.shadowColor =
+        color;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        x,
+        y + size * 0.3
+    );
+
+
+    ctx.bezierCurveTo(
+
+        x - size,
+        y - size * 0.2,
+
+        x - size,
+        y + size * 0.7,
+
+        x,
+        y + size
+
+    );
+
+
+    ctx.bezierCurveTo(
+
+        x + size,
+        y + size * 0.7,
+
+        x + size,
+        y - size * 0.2,
+
+        x,
+        y + size * 0.3
+
+    );
+
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
+
+
+
+/* =========================
+   UPDATE HEARTS
+========================= */
+
+function updateHearts() {
+
+    for (
+        let i = hearts.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        const h =
+            hearts[i];
+
+
+        h.y -= h.speed;
+
+        h.x += h.drift;
+
+        h.life--;
+
+
+        if (
+
+            h.life <= 0 ||
+
+            h.y < -30
+
+        ) {
+
+            hearts.splice(
+                i,
+                1
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================
+   DRAW HEARTS
+========================= */
+
+function drawHearts() {
+
+    for (
+        const h of hearts
+    ) {
+
+        const alpha =
+            Math.min(
+                h.life / 80,
+                1
+            );
+
+
+        drawHeart(
+
+            h.x,
+
+            h.y,
+
+            h.size,
+
+            h.color,
+
+            alpha
+
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   CONTINUOUS HEARTS
+========================= */
+
+setInterval(
+
+    () => {
+
+        createHeart();
+
+    },
+
+    220
+
+);
+
+
+
 /* =========================
    ANIMATION
 ========================= */
 
 function animate() {
-
 
     ctx.clearRect(
 
@@ -903,8 +1001,9 @@ function animate() {
 
     updateRockets();
 
-
     updateParticles();
+
+    updateHearts();
 
 
     for (
@@ -918,12 +1017,15 @@ function animate() {
 
     drawParticles();
 
+    drawHearts();
+
 
     requestAnimationFrame(
         animate
     );
 
 }
+
 
 
 /* =========================
@@ -951,9 +1053,7 @@ setTimeout(
 );
 
 
-/* =========================
-   CONTINUOUS FIREWORKS
-========================= */
+/* CONTINUOUS FIREWORKS */
 
 setInterval(
 
@@ -968,13 +1068,13 @@ setInterval(
 );
 
 
-/* =========================
-   START
-========================= */
+/* START */
 
 animate();
 
 </script>
 
+
 </body>
+
 </html>
